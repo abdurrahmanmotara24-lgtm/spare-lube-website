@@ -1,0 +1,1 @@
+ALTER TABLE public.weekly_specials ADD COLUMN custom_description text;

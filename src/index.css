@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Oswald:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 8%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 8%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 8%;
+
+    --primary: 0 85% 46%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 12%;
+
+    --muted: 0 0% 95%;
+    --muted-foreground: 0 0% 42%;
+
+    --accent: 45 100% 51%;
+    --accent-foreground: 0 0% 8%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 91%;
+    --input: 0 0% 91%;
+    --ring: 0 85% 46%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 0 0% 20%;
+    --sidebar-primary: 0 85% 46%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 95%;
+    --sidebar-accent-foreground: 0 0% 10%;
+    --sidebar-border: 0 0% 90%;
+    --sidebar-ring: 0 85% 46%;
+    --hero-overlay-base: 0 0% 8%;
+    --motion-fast: 160ms;
+    --motion-normal: 340ms;
+    --motion-ease-emphasized: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-fast: 1ms;
+    --motion-normal: 1ms;
+  }
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 0;
+}
+
+::view-transition-new(root) {
+  z-index: 1;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', sans-serif;
+    transition: background-color 150ms ease-out, color 150ms ease-out, border-color 150ms ease-out;
+  }
+
+  h1, h2, h3 {
+    font-family: 'Oswald', sans-serif;
+  }
+}
+
+@layer utilities {
+  .section-padding {
+    @apply px-5 sm:px-6 lg:px-8;
+  }
+  .font-heading {
+    font-family: 'Oswald', sans-serif;
+  }
+}
+
+@layer utilities {
+  @keyframes ws-shine {
+    0% { transform: translateX(-120%) skewX(-20deg); }
+    100% { transform: translateX(220%) skewX(-20deg); }
+  }
+  .ws-badge-shine::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 35%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent);
+    animation: ws-shine 2.6s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes ws-pulse-glow {
+    0%, 100% { box-shadow: 0 0 0 0 hsl(var(--primary) / 0.45), 0 0 18px 2px hsl(var(--primary) / 0.25); }
+    50% { box-shadow: 0 0 0 6px hsl(var(--primary) / 0), 0 0 28px 6px hsl(var(--primary) / 0.45); }
+  }
+  .ws-pulse-glow { animation: ws-pulse-glow 2.4s ease-in-out infinite; }
+  @keyframes ws-best-glow {
+    0%, 100% { box-shadow: 0 0 0 1px hsl(45 100% 55% / 0.6), 0 0 22px 2px hsl(45 100% 55% / 0.35); }
+    50% { box-shadow: 0 0 0 1px hsl(45 100% 60% / 0.9), 0 0 36px 8px hsl(45 100% 55% / 0.6); }
+  }
+  .ws-best-glow { animation: ws-best-glow 2.8s ease-in-out infinite; }
+}
