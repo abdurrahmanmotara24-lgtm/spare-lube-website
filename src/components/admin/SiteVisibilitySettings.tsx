@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Eye } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
@@ -23,6 +23,26 @@ const SiteVisibilitySettings = () => {
   const { settings, refetch } = useSiteSettings();
   const { toast } = useToast();
   const [savingKeys, setSavingKeys] = useState<VisibilityKey[]>([]);
+  const [draft, setDraft] = useState<Record<VisibilityKey, boolean>>({
+    show_about: settings.show_about,
+    show_contact: settings.show_contact,
+    show_operating_hours: settings.show_operating_hours,
+    show_weekly_specials: settings.show_weekly_specials,
+  });
+
+  useEffect(() => {
+    setDraft({
+      show_about: settings.show_about,
+      show_contact: settings.show_contact,
+      show_operating_hours: settings.show_operating_hours,
+      show_weekly_specials: settings.show_weekly_specials,
+    });
+  }, [
+    settings.show_about,
+    settings.show_contact,
+    settings.show_operating_hours,
+    settings.show_weekly_specials,
+  ]);
 
   const setSaving = (key: VisibilityKey, isSaving: boolean) => {
     setSavingKeys((prev) =>
@@ -31,6 +51,8 @@ const SiteVisibilitySettings = () => {
   };
 
   const updateVisibility = async (key: VisibilityKey, checked: boolean) => {
+    const previous = draft[key];
+    setDraft((prev) => ({ ...prev, [key]: checked }));
     setSaving(key, true);
     const { error } = await supabase.from("site_settings").upsert(
       {
@@ -42,6 +64,7 @@ const SiteVisibilitySettings = () => {
     setSaving(key, false);
 
     if (error) {
+      setDraft((prev) => ({ ...prev, [key]: previous }));
       toast({
         title: "Could not update visibility",
         description: error.message,
@@ -52,6 +75,7 @@ const SiteVisibilitySettings = () => {
     }
 
     toast({ title: "Visibility updated" });
+    await refetch();
   };
 
   return (
@@ -62,7 +86,7 @@ const SiteVisibilitySettings = () => {
       </h2>
       <div className="space-y-4">
         {VISIBILITY_FIELDS.map((field) => {
-          const checked = settings[field.key];
+          const checked = draft[field.key];
           const saving = savingKeys.includes(field.key);
           return (
             <div key={field.key} className="rounded-lg border border-border p-4">
