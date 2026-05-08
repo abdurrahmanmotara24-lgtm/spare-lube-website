@@ -324,6 +324,10 @@ export type Database = {
           id: string
           primary_color: string
           secondary_color: string
+          show_about: boolean
+          show_contact: boolean
+          show_operating_hours: boolean
+          show_weekly_specials: boolean
           updated_at: string
         }
         Insert: {
@@ -341,6 +345,10 @@ export type Database = {
           id?: string
           primary_color?: string
           secondary_color?: string
+          show_about?: boolean
+          show_contact?: boolean
+          show_operating_hours?: boolean
+          show_weekly_specials?: boolean
           updated_at?: string
         }
         Update: {
@@ -358,6 +366,10 @@ export type Database = {
           id?: string
           primary_color?: string
           secondary_color?: string
+          show_about?: boolean
+          show_contact?: boolean
+          show_operating_hours?: boolean
+          show_weekly_specials?: boolean
           updated_at?: string
         }
         Relationships: []

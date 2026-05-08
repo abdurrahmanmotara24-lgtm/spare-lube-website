@@ -1,10 +1,12 @@
 import { NavLink } from "@/components/NavLink";
 import { useSiteContact } from "@/hooks/useSiteContact";
 import { useOperatingHours, formatHoursTime } from "@/hooks/useOperatingHours";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 
 const Footer = () => {
   const { contact } = useSiteContact();
   const { hours } = useOperatingHours();
+  const { settings } = useSiteSettings();
   const today = new Date().getDay();
   const todayHours = hours.find((item) => item.day_of_week === today);
   const hoursText = todayHours
@@ -21,11 +23,17 @@ const Footer = () => {
             <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground mb-2">Quick Links</p>
             <div className="space-y-2 text-sm">
               <NavLink to="/" end className="block text-foreground/90 hover:text-foreground">Home</NavLink>
-              <NavLink to="/about" className="block text-foreground/90 hover:text-foreground">About</NavLink>
-              <NavLink to="/contact" className="block text-foreground/90 hover:text-foreground">Contact</NavLink>
-              <NavLink to="/operating-hours" className="block text-foreground/90 hover:text-foreground">
-                Operating Hours
-              </NavLink>
+              {settings.show_about ? (
+                <NavLink to="/about" className="block text-foreground/90 hover:text-foreground">About</NavLink>
+              ) : null}
+              {settings.show_contact ? (
+                <NavLink to="/contact" className="block text-foreground/90 hover:text-foreground">Contact</NavLink>
+              ) : null}
+              {settings.show_operating_hours ? (
+                <NavLink to="/operating-hours" className="block text-foreground/90 hover:text-foreground">
+                  Operating Hours
+                </NavLink>
+              ) : null}
             </div>
           </div>
           <div>

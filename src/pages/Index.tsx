@@ -421,13 +421,15 @@ const Index = () => {
       />
       <Hero onBrowseClick={scrollToCatalog} />
       <TrustBar />
-      <div id="specials">
-        <WeeklySpecialsCatalog
-          onAddToOrderList={handleAddToQuote}
-          showOrderReadyConfirmation={showOrderReadyConfirmation}
-          onOrderReadyConfirmationDismiss={() => setShowOrderReadyConfirmation(false)}
-        />
-      </div>
+      {settings.show_weekly_specials ? (
+        <div id="specials">
+          <WeeklySpecialsCatalog
+            onAddToOrderList={handleAddToQuote}
+            showOrderReadyConfirmation={showOrderReadyConfirmation}
+            onOrderReadyConfirmationDismiss={() => setShowOrderReadyConfirmation(false)}
+          />
+        </div>
+      ) : null}
       <BrandSection
         selectedBrand={selectedBrand}
         viewMode={brandViewMode}
@@ -451,9 +453,11 @@ const Index = () => {
         />
       </div>
       <WhyChoose />
-      <div id="contact">
-        <ContactSection />
-      </div>
+      {settings.show_contact ? (
+        <div id="contact">
+          <ContactSection />
+        </div>
+      ) : null}
       <Footer />
       <ScrollToTopFab />
       {!mobileNavMinimized ? (
@@ -472,7 +476,15 @@ const Index = () => {
               <ChevronDown className="h-3.5 w-3.5" />
             </button>
 
-            <div className="grid grid-cols-5 gap-1 pr-6">
+            <div
+              className={`grid gap-1 pr-6 ${
+                settings.show_weekly_specials && settings.show_contact
+                  ? "grid-cols-5"
+                  : settings.show_weekly_specials || settings.show_contact
+                    ? "grid-cols-4"
+                    : "grid-cols-3"
+              }`}
+            >
               <a href="#home" className="flex min-h-11 flex-col items-center justify-center gap-1 rounded-lg text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-primary/16 hover:text-primary">
                 <Home className="h-3.5 w-3.5" />
                 Home
@@ -481,14 +493,18 @@ const Index = () => {
                 <ShoppingBag className="h-3.5 w-3.5" />
                 Shop
               </a>
-              <a href="#specials" className="flex min-h-11 flex-col items-center justify-center gap-1 rounded-lg text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-primary/16 hover:text-primary">
-                <Sparkles className="h-3.5 w-3.5" />
-                Specials
-              </a>
-              <a href="#contact" className="flex min-h-11 flex-col items-center justify-center gap-1 rounded-lg text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-primary/16 hover:text-primary">
-                <Phone className="h-3.5 w-3.5" />
-                Contact
-              </a>
+              {settings.show_weekly_specials ? (
+                <a href="#specials" className="flex min-h-11 flex-col items-center justify-center gap-1 rounded-lg text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-primary/16 hover:text-primary">
+                  <Sparkles className="h-3.5 w-3.5" />
+                  Specials
+                </a>
+              ) : null}
+              {settings.show_contact ? (
+                <a href="#contact" className="flex min-h-11 flex-col items-center justify-center gap-1 rounded-lg text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-primary/16 hover:text-primary">
+                  <Phone className="h-3.5 w-3.5" />
+                  Contact
+                </a>
+              ) : null}
               <button
                 type="button"
                 onClick={openOrderListFromMobileNav}

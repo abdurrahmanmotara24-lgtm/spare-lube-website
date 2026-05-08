@@ -18,6 +18,7 @@ import CategoryManager from "@/components/admin/CategoryManager";
 import SizeManager from "@/components/admin/SizeManager";
 import PackSizeManager from "@/components/admin/PackSizeManager";
 import DesignSettings from "@/components/admin/DesignSettings";
+import SiteVisibilitySettings from "@/components/admin/SiteVisibilitySettings";
 import WeeklySpecialsManager from "@/components/admin/WeeklySpecialsManager";
 import PublicPageContentManager from "@/components/admin/PublicPageContentManager";
 import ContactTeamManager from "@/components/admin/ContactTeamManager";
@@ -440,6 +441,7 @@ const Admin = () => {
           <div className="flex flex-wrap gap-2">
             {[
               ["design-settings", "Design Settings"],
+              ["site-visibility", "Site Visibility"],
               ["public-page-content", "Public Page Content"],
               ["main-contact-channels", "Main Contact Channels"],
               ["contact-team", "Contact Team"],
@@ -466,6 +468,9 @@ const Admin = () => {
         {/* Design Settings */}
         <div id="design-settings" className="scroll-mt-24">
           <DesignSettings />
+        </div>
+        <div id="site-visibility" className="scroll-mt-24">
+          <SiteVisibilitySettings />
         </div>
         <div id="public-page-content" className="scroll-mt-24">
           <PublicPageContentManager />

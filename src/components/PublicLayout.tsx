@@ -213,15 +213,21 @@ const PublicLayout = ({ children }: PublicLayoutProps) => {
             <NavLink to="/" end className={navLinkClass} activeClassName={activeNavLinkClass}>
               Home
             </NavLink>
-            <NavLink to="/about" className={navLinkClass} activeClassName={activeNavLinkClass}>
-              About
-            </NavLink>
-            <NavLink to="/contact" className={navLinkClass} activeClassName={activeNavLinkClass}>
-              Contact
-            </NavLink>
-            <NavLink to="/operating-hours" className={navLinkClass} activeClassName={activeNavLinkClass}>
-              Operating Hours
-            </NavLink>
+            {settings.show_about ? (
+              <NavLink to="/about" className={navLinkClass} activeClassName={activeNavLinkClass}>
+                About
+              </NavLink>
+            ) : null}
+            {settings.show_contact ? (
+              <NavLink to="/contact" className={navLinkClass} activeClassName={activeNavLinkClass}>
+                Contact
+              </NavLink>
+            ) : null}
+            {settings.show_operating_hours ? (
+              <NavLink to="/operating-hours" className={navLinkClass} activeClassName={activeNavLinkClass}>
+                Operating Hours
+              </NavLink>
+            ) : null}
           </nav>
           <div className="hidden sm:flex items-center gap-2">
             <Button
@@ -257,15 +263,21 @@ const PublicLayout = ({ children }: PublicLayoutProps) => {
             <NavLink to="/" end className={navLinkClass} activeClassName={activeNavLinkClass}>
               Home
             </NavLink>
-            <NavLink to="/about" className={navLinkClass} activeClassName={activeNavLinkClass}>
-              About
-            </NavLink>
-            <NavLink to="/contact" className={navLinkClass} activeClassName={activeNavLinkClass}>
-              Contact
-            </NavLink>
-            <NavLink to="/operating-hours" className={navLinkClass} activeClassName={activeNavLinkClass}>
-              Hours
-            </NavLink>
+            {settings.show_about ? (
+              <NavLink to="/about" className={navLinkClass} activeClassName={activeNavLinkClass}>
+                About
+              </NavLink>
+            ) : null}
+            {settings.show_contact ? (
+              <NavLink to="/contact" className={navLinkClass} activeClassName={activeNavLinkClass}>
+                Contact
+              </NavLink>
+            ) : null}
+            {settings.show_operating_hours ? (
+              <NavLink to="/operating-hours" className={navLinkClass} activeClassName={activeNavLinkClass}>
+                Hours
+              </NavLink>
+            ) : null}
             <Button
               variant="outline"
               size="sm"

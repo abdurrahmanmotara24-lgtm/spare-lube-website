@@ -17,6 +17,7 @@ import QuoteListSection, { type QuoteListItem } from "@/components/QuoteListSect
 import spareLubeLogo from "@/assets/spare-lube-logo.jpg";
 import { trackEvent } from "@/lib/analytics";
 import { useSiteContact } from "@/hooks/useSiteContact";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { buildWhatsAppUrl } from "@/lib/contact";
 
 interface HeaderProps {
@@ -51,6 +52,7 @@ const Header = ({
   const prefersReducedMotion = useReducedMotion();
   const quoteCount = quoteItems.reduce((sum, item) => sum + item.quantity, 0);
   const { contact } = useSiteContact();
+  const { settings } = useSiteSettings();
   const whatsappLink = buildWhatsAppUrl(
     contact.whatsapp_phone,
     "Hi, I would like to enquire about your products",
@@ -82,15 +84,21 @@ const Header = ({
             <NavLink to="/" className={navClassName} activeClassName={navActiveClassName} end>
               Home
             </NavLink>
-            <NavLink to="/about" className={navClassName} activeClassName={navActiveClassName}>
-              About
-            </NavLink>
-            <NavLink to="/contact" className={navClassName} activeClassName={navActiveClassName}>
-              Contact
-            </NavLink>
-            <NavLink to="/operating-hours" className={navClassName} activeClassName={navActiveClassName}>
-              Hours
-            </NavLink>
+            {settings.show_about ? (
+              <NavLink to="/about" className={navClassName} activeClassName={navActiveClassName}>
+                About
+              </NavLink>
+            ) : null}
+            {settings.show_contact ? (
+              <NavLink to="/contact" className={navClassName} activeClassName={navActiveClassName}>
+                Contact
+              </NavLink>
+            ) : null}
+            {settings.show_operating_hours ? (
+              <NavLink to="/operating-hours" className={navClassName} activeClassName={navActiveClassName}>
+                Hours
+              </NavLink>
+            ) : null}
           </nav>
 
           {/* Search - Desktop */}
@@ -312,27 +320,33 @@ const Header = ({
               >
                 Home
               </NavLink>
-              <NavLink
-                to="/about"
-                className="rounded-md border border-border bg-card px-3 py-2 text-center text-xs font-semibold uppercase tracking-[0.12em] text-foreground"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                About
-              </NavLink>
-              <NavLink
-                to="/contact"
-                className="rounded-md border border-border bg-card px-3 py-2 text-center text-xs font-semibold uppercase tracking-[0.12em] text-foreground"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Contact
-              </NavLink>
-              <NavLink
-                to="/operating-hours"
-                className="rounded-md border border-border bg-card px-3 py-2 text-center text-xs font-semibold uppercase tracking-[0.12em] text-foreground"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Hours
-              </NavLink>
+              {settings.show_about ? (
+                <NavLink
+                  to="/about"
+                  className="rounded-md border border-border bg-card px-3 py-2 text-center text-xs font-semibold uppercase tracking-[0.12em] text-foreground"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  About
+                </NavLink>
+              ) : null}
+              {settings.show_contact ? (
+                <NavLink
+                  to="/contact"
+                  className="rounded-md border border-border bg-card px-3 py-2 text-center text-xs font-semibold uppercase tracking-[0.12em] text-foreground"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Contact
+                </NavLink>
+              ) : null}
+              {settings.show_operating_hours ? (
+                <NavLink
+                  to="/operating-hours"
+                  className="rounded-md border border-border bg-card px-3 py-2 text-center text-xs font-semibold uppercase tracking-[0.12em] text-foreground"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Hours
+                </NavLink>
+              ) : null}
             </div>
             <Button
               variant="outline"

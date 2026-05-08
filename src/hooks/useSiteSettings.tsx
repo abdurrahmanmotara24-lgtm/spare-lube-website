@@ -15,6 +15,10 @@ export interface SiteSettings {
   hero_eyebrow: string;
   hero_heading: string;
   hero_subheading: string;
+  show_about: boolean;
+  show_contact: boolean;
+  show_operating_hours: boolean;
+  show_weekly_specials: boolean;
 }
 
 export const DEFAULT_SETTINGS: SiteSettings = {
@@ -31,6 +35,10 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   hero_eyebrow: "Trusted Wholesale Partner",
   hero_heading: "Wholesale Lubricants Supplier",
   hero_subheading: "Shell, Castrol, and More",
+  show_about: true,
+  show_contact: true,
+  show_operating_hours: true,
+  show_weekly_specials: true,
 };
 
 interface Ctx {
