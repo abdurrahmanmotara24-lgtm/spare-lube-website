@@ -286,14 +286,15 @@ const BrandSection = ({ selectedBrand, viewMode, onBrandSelect, onBackToGrid }: 
                 const showSelectedPlaceholder = isFocused && isSelected;
                 if (showSelectedPlaceholder) {
                   return (
-                    <div
-                      key={`${brand.id}-placeholder`}
+                    <motion.div
+                      key={brand.id}
+                      layout
                       className="p-6 rounded-xl border border-transparent opacity-0 pointer-events-none"
                       aria-hidden="true"
                     >
                       <div className="w-full h-14 sm:h-16 mb-3" />
                       <div className="h-4 w-20 mx-auto" />
-                    </div>
+                    </motion.div>
                   );
                 }
                 return (
