@@ -1,12 +1,11 @@
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { flushSync } from "react-dom";
-import { MessageCircle } from "lucide-react";
+import { MessageCircle, Home, Info, Phone, Clock3 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { Button } from "@/components/ui/button";
 import { ThemeToggleIcon } from "@/components/ui/theme-toggle-icon";
 import Footer from "@/components/Footer";
 import ScrollToTopFab from "@/components/ScrollToTopFab";
-import spareLubeLogo from "@/assets/spare-lube-logo.jpg";
 import { useSiteContact } from "@/hooks/useSiteContact";
 import { buildWhatsAppUrl } from "@/lib/contact";
 import { applyThemeToDocument, useSiteSettings } from "@/hooks/useSiteSettings";
@@ -42,6 +41,17 @@ const PublicLayout = ({ children }: PublicLayoutProps) => {
     contact.whatsapp_phone,
     "Hi, I would like to enquire about your products.",
   );
+  const mobileNavItems = useMemo(
+    () =>
+      [
+        { to: "/", enabled: true, icon: Home, label: "Home", end: true },
+        { to: "/about", enabled: settings.show_about, icon: Info, label: "About" },
+        { to: "/contact", enabled: settings.show_contact, icon: Phone, label: "Contact" },
+        { to: "/operating-hours", enabled: settings.show_operating_hours, icon: Clock3, label: "Operating hours" },
+      ].filter((item) => item.enabled),
+    [settings.show_about, settings.show_contact, settings.show_operating_hours],
+  );
+  const mobileControlCount = mobileNavItems.length + 2;
 
   useEffect(() => {
     const root = document.documentElement;
@@ -202,13 +212,6 @@ const PublicLayout = ({ children }: PublicLayoutProps) => {
     <div className="min-h-screen bg-background pb-20 sm:pb-10">
       <header className="sticky top-0 z-50 border-b border-border bg-background">
         <div className="max-w-7xl mx-auto section-padding h-16 flex items-center justify-between gap-4">
-          <NavLink to="/" className="shrink-0">
-            <img
-              src={spareLubeLogo}
-              alt="Spare Lube - Auto Lubricant Distributors"
-              className="h-11 sm:h-12 w-auto object-contain"
-            />
-          </NavLink>
           <nav className="hidden md:flex items-center gap-5">
             <NavLink to="/" end className={navLinkClass} activeClassName={activeNavLinkClass}>
               Home
@@ -251,40 +254,34 @@ const PublicLayout = ({ children }: PublicLayoutProps) => {
               </a>
             </Button>
           </div>
-          <Button asChild variant="whatsapp" size="sm" className="sm:hidden">
-            <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
-              <MessageCircle className="h-4 w-4" />
-              Chat
-            </a>
-          </Button>
-        </div>
-        <div className="md:hidden border-t border-border/70">
-          <div className="max-w-7xl mx-auto section-padding py-2 flex items-center gap-4 overflow-x-auto">
-            <NavLink to="/" end className={navLinkClass} activeClassName={activeNavLinkClass}>
-              Home
-            </NavLink>
-            {settings.show_about ? (
-              <NavLink to="/about" className={navLinkClass} activeClassName={activeNavLinkClass}>
-                About
+          <div
+            className="sm:hidden grid w-full gap-1.5 py-2"
+            style={{ gridTemplateColumns: `repeat(${mobileControlCount}, minmax(0, 1fr))` }}
+          >
+            {mobileNavItems.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.end}
+                className="inline-flex min-h-11 items-center justify-center rounded-lg border border-border/70 bg-card/80 text-foreground transition-colors hover:bg-primary/10"
+                activeClassName="border-primary/45 text-primary"
+                aria-label={item.label}
+              >
+                <item.icon className="h-4 w-4" />
               </NavLink>
-            ) : null}
-            {settings.show_contact ? (
-              <NavLink to="/contact" className={navLinkClass} activeClassName={activeNavLinkClass}>
-                Contact
-              </NavLink>
-            ) : null}
-            {settings.show_operating_hours ? (
-              <NavLink to="/operating-hours" className={navLinkClass} activeClassName={activeNavLinkClass}>
-                Hours
-              </NavLink>
-            ) : null}
+            ))}
+            <Button asChild variant="whatsapp" size="icon" className="h-11 w-full rounded-lg">
+              <a href={whatsappLink} target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
+                <MessageCircle className="h-4 w-4" />
+              </a>
+            </Button>
             <Button
               variant="outline"
-              size="sm"
+              size="icon"
               onClick={(event) => toggleDarkMode({ x: event.clientX, y: event.clientY })}
               aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
               aria-pressed={isDarkMode}
-              className="ml-auto min-h-9"
+              className="h-11 w-full rounded-lg"
             >
               <ThemeToggleIcon
                 isDarkMode={isDarkMode}

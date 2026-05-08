@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useDbBrands } from "@/hooks/useDbBrands";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
@@ -12,7 +12,6 @@ interface BrandSectionProps {
 }
 
 const FOCUS_CAMERA_START_DELAY_MS = 120;
-const RETURN_CAMERA_START_DELAY_MS = 120;
 const CAMERA_GLIDE_MS = 950;
 const CAMERA_EASE = [0.22, 1, 0.36, 1] as const;
 const CAMERA_ADAPTIVE_MAX_MS = 5200;
@@ -28,8 +27,6 @@ const BrandSection = ({ selectedBrand, viewMode, onBrandSelect, onBackToGrid }: 
   const isMobileViewport =
     typeof window !== "undefined" && window.matchMedia("(max-width: 767px), (hover: none), (pointer: coarse)").matches;
   const mobileDurationMultiplier = isMobileViewport ? MOBILE_ANIMATION_SPEED_MULTIPLIER : 1;
-  const returnCameraStartDelayMs = RETURN_CAMERA_START_DELAY_MS;
-  const returnCameraMode: "fixed" | "adaptive" = "adaptive";
   const tileMicroDuration = 0.32 * mobileDurationMultiplier;
   const tileMicroDelay = 0.22;
   const tileMove = {
@@ -39,9 +36,6 @@ const BrandSection = ({ selectedBrand, viewMode, onBrandSelect, onBackToGrid }: 
   };
 
   const focusedTileWrapperRef = useRef<HTMLDivElement | null>(null);
-  const lastFocusedBrandRef = useRef<string | null>(null);
-  const [returningBrandId, setReturningBrandId] = useState<string | null>(null);
-  const sectionRef = useRef<HTMLElement | null>(null);
   const scrollGuideRafRef = useRef<number | null>(null);
   const scrollGuideStartRef = useRef<number>(0);
   const scrollGuideTimerRef = useRef<number | null>(null);
@@ -49,8 +43,7 @@ const BrandSection = ({ selectedBrand, viewMode, onBrandSelect, onBackToGrid }: 
     () => brands.find((brand) => brand.id === selectedBrand) || null,
     [brands, selectedBrand],
   );
-  const activeFocusedBrandId =
-    viewMode === "brandFocused" ? selectedBrandData?.id ?? null : returningBrandId;
+  const activeFocusedBrandId = viewMode === "brandFocused" ? selectedBrandData?.id ?? null : null;
   const activeFocusedBrandData = useMemo(
     () => brands.find((brand) => brand.id === activeFocusedBrandId) || null,
     [brands, activeFocusedBrandId],
@@ -210,43 +203,13 @@ const BrandSection = ({ selectedBrand, viewMode, onBrandSelect, onBackToGrid }: 
 
   useEffect(() => {
     if (shouldReduceMotion) return;
-    if (viewMode !== "grid") return;
-    const returningBrandId = lastFocusedBrandRef.current;
-    if (!returningBrandId) return;
-    const stopFollow = startCameraFollow(
-      () => sectionRef.current?.querySelector<HTMLElement>(`[data-brand-role="focus-tile"]`) || null,
-      returnCameraStartDelayMs,
-      returnCameraMode,
-      CAMERA_GLIDE_MS,
-      !isMobileViewport,
-    );
-
-    return () => {
-      stopFollow?.();
-    };
-  }, [viewMode, shouldReduceMotion, returnCameraStartDelayMs, returnCameraMode]);
-
-  useEffect(() => {
-    if (shouldReduceMotion) return;
     if (viewMode !== "brandFocused" || !selectedBrandData) return;
-    if (lastFocusedBrandRef.current !== selectedBrandData.id) {
-      lastFocusedBrandRef.current = selectedBrandData.id;
-    }
-    setReturningBrandId(selectedBrandData.id);
-
     return startCameraFollow(
       () => focusedTileWrapperRef.current,
       FOCUS_CAMERA_START_DELAY_MS,
       "fixed",
     );
   }, [viewMode, selectedBrandData, shouldReduceMotion]);
-
-  useEffect(() => {
-    if (viewMode !== "grid" || !returningBrandId) return;
-    const returnHoldMs = Math.round(950 * mobileDurationMultiplier + 320);
-    const timeout = window.setTimeout(() => setReturningBrandId(null), returnHoldMs);
-    return () => window.clearTimeout(timeout);
-  }, [viewMode, returningBrandId, mobileDurationMultiplier]);
 
   const handleBrandClick = (brandId: string) => {
     const next = selectedBrand === brandId ? null : brandId;
@@ -265,22 +228,18 @@ const BrandSection = ({ selectedBrand, viewMode, onBrandSelect, onBackToGrid }: 
   };
 
   return (
-    <section ref={sectionRef} id="brands" className="max-w-7xl mx-auto section-padding py-16 sm:py-18">
+    <section id="brands" className="max-w-7xl mx-auto section-padding py-16 sm:py-18">
       <h2 className="font-heading text-[1.5rem] sm:text-4xl font-bold text-foreground text-center uppercase tracking-[0.005em] sm:tracking-wide mb-12">
         Browse by Brand
       </h2>
 
       <LayoutGroup id="brand-tiles">
-        <motion.div
-          layout
-          transition={tileMove}
-          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4"
-        >
+        <motion.div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
           {loading
             ? Array.from({ length: 10 }).map((_, i) => (
                 <Skeleton key={i} className="h-32 rounded-xl" />
               ))
-            : brands.map((brand, idx) => {
+            : brands.map((brand) => {
                 const isFocused = viewMode === "brandFocused";
                 const isSelected = selectedBrand === brand.id;
                 const showSelectedPlaceholder = isFocused && isSelected;
@@ -288,19 +247,17 @@ const BrandSection = ({ selectedBrand, viewMode, onBrandSelect, onBackToGrid }: 
                   return (
                     <motion.div
                       key={brand.id}
-                      layout
-                      className="p-6 rounded-xl border border-transparent opacity-0 pointer-events-none"
+                      className="flex flex-col items-center justify-center p-4 sm:p-5 rounded-xl border border-transparent opacity-0 pointer-events-none"
                       aria-hidden="true"
                     >
-                      <div className="w-full h-14 sm:h-16 mb-3" />
-                      <div className="h-4 w-20 mx-auto" />
+                      <div className="w-full h-12 sm:h-14 mb-2.5" />
+                      <div className="h-4 w-20" />
                     </motion.div>
                   );
                 }
                 return (
                   <motion.button
                     key={brand.id}
-                    layout
                     layoutId={`brand-tile-${brand.id}`}
                     data-brand-id={brand.id}
                     data-brand-role="grid-tile"

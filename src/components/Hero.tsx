@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 import heroBgDefault from "@/assets/hero-bg.png";
+import spareLubeLogo from "@/assets/spare-lube-logo.jpg";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 
 interface HeroProps {
@@ -34,6 +35,11 @@ const Hero = ({ onBrowseClick }: HeroProps) => {
 
       <div className="relative max-w-7xl mx-auto section-padding py-24 sm:py-32 lg:py-40">
         <div className="mx-auto max-w-3xl px-5 py-7 text-center sm:px-8 sm:py-10">
+        <img
+          src={spareLubeLogo}
+          alt="Spare Lube"
+          className="mx-auto mb-5 h-[67px] sm:h-[84px] lg:h-[101px] w-auto object-contain"
+        />
         <p className="text-[10px] sm:text-sm font-semibold tracking-[0.14em] sm:tracking-[0.3em] uppercase text-primary mb-4">
           {settings.hero_eyebrow}
         </p>

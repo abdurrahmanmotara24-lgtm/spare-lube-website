@@ -57,16 +57,20 @@ const WeeklySpecialsCatalog = ({
 
   const weekEnd = useMemo(() => getWeekEnd(), []);
   const { days, hours, minutes, seconds } = useCountdown(weekEnd);
+  const productsById = useMemo(
+    () => new Map(dbProducts.map((product) => [product.id, product])),
+    [dbProducts],
+  );
 
   const specialCards = useMemo(() => {
     return weeklySpecials
       .map((special) => {
-        const dbProduct = dbProducts.find((product) => product.id === special.productId);
+        const dbProduct = productsById.get(special.productId);
         if (!dbProduct) return null;
         return { special, product: dbProduct as Product };
       })
       .filter(Boolean) as { special: (typeof weeklySpecials)[number]; product: Product }[];
-  }, [weeklySpecials, dbProducts]);
+  }, [weeklySpecials, productsById]);
 
   const getQty = (id: string) => quantities[id] ?? 1;
   const setQty = (id: string, next: number) =>

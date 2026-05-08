@@ -79,6 +79,19 @@ const Index = () => {
   const [quoteCountPulseKey, setQuoteCountPulseKey] = useState(0);
   const [showOrderReadyConfirmation, setShowOrderReadyConfirmation] = useState(false);
   const [mobileNavMinimized, setMobileNavMinimized] = useState(false);
+  const quickNavPanelStyle = useMemo(
+    () => ({
+      background: isDarkMode
+        ? "linear-gradient(145deg, hsl(var(--background) / 0.92) 0%, hsl(var(--primary) / 0.2) 52%, hsl(var(--background) / 0.86) 100%)"
+        : "linear-gradient(145deg, hsl(var(--background) / 0.96) 0%, hsl(var(--primary) / 0.27) 52%, hsl(var(--background) / 0.93) 100%)",
+    }),
+    [isDarkMode],
+  );
+  const quickNavItemCount =
+    2 +
+    (settings.show_weekly_specials ? 1 : 0) +
+    (settings.show_contact ? 1 : 0) +
+    (settings.show_order_list ? 1 : 0);
 
   const brandScopedTheme = useMemo(() => {
     if (!selectedBrand) return settings;
@@ -466,11 +479,14 @@ const Index = () => {
           className="fixed inset-x-3 bottom-3 z-50 sm:hidden"
           aria-label="Mobile quick navigation"
         >
-          <div className="relative mx-auto max-w-md rounded-2xl border border-primary/35 bg-background/72 p-1 shadow-[0_18px_36px_-20px_rgba(0,0,0,0.9)] backdrop-blur-xl">
+          <div
+            className="relative mx-auto max-w-md rounded-2xl border border-primary/40 p-1 shadow-[0_18px_36px_-20px_rgba(0,0,0,0.9)] backdrop-blur-xl"
+            style={quickNavPanelStyle}
+          >
             <button
               type="button"
               onClick={() => setMobileNavMinimized(true)}
-              className="absolute right-1 top-1 inline-flex h-6 w-6 items-center justify-center rounded-md text-foreground/85 transition-colors hover:bg-primary/15 hover:text-primary"
+              className="absolute right-1 top-1 inline-flex h-6 w-6 items-center justify-center rounded-md text-foreground/95 transition-colors hover:bg-primary/20 hover:text-foreground"
               aria-label="Minimize quick navigation"
               aria-expanded
             >
@@ -478,39 +494,26 @@ const Index = () => {
             </button>
 
             <div
-              className={`grid gap-1 pr-6 ${
-                2 +
-                  (settings.show_weekly_specials ? 1 : 0) +
-                  (settings.show_contact ? 1 : 0) +
-                  (settings.show_order_list ? 1 : 0) >=
-                5
-                  ? "grid-cols-5"
-                  : 2 +
-                        (settings.show_weekly_specials ? 1 : 0) +
-                        (settings.show_contact ? 1 : 0) +
-                        (settings.show_order_list ? 1 : 0) ===
-                      4
-                    ? "grid-cols-4"
-                    : "grid-cols-3"
-              }`}
+              className="grid gap-1 pr-6"
+              style={{ gridTemplateColumns: `repeat(${quickNavItemCount}, minmax(0, 1fr))` }}
             >
-              <a href="#home" className="flex min-h-11 flex-col items-center justify-center gap-1 rounded-lg text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-primary/16 hover:text-primary">
-                <Home className="h-3.5 w-3.5" />
+              <a href="#home" className="flex min-h-11 flex-col items-center justify-center gap-1 rounded-lg text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground/95 [text-shadow:0_1px_1px_rgba(0,0,0,0.18)] transition-colors hover:bg-primary/20 hover:text-foreground">
+                <Home className="h-4 w-4 stroke-[2.3] drop-shadow-[0_1px_1px_rgba(0,0,0,0.24)]" />
                 Home
               </a>
-              <a href="#shop" className="flex min-h-11 flex-col items-center justify-center gap-1 rounded-lg text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-primary/16 hover:text-primary">
-                <ShoppingBag className="h-3.5 w-3.5" />
+              <a href="#shop" className="flex min-h-11 flex-col items-center justify-center gap-1 rounded-lg text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground/95 [text-shadow:0_1px_1px_rgba(0,0,0,0.18)] transition-colors hover:bg-primary/20 hover:text-foreground">
+                <ShoppingBag className="h-4 w-4 stroke-[2.3] drop-shadow-[0_1px_1px_rgba(0,0,0,0.24)]" />
                 Shop
               </a>
               {settings.show_weekly_specials ? (
-                <a href="#specials" className="flex min-h-11 flex-col items-center justify-center gap-1 rounded-lg text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-primary/16 hover:text-primary">
-                  <Sparkles className="h-3.5 w-3.5" />
+                <a href="#specials" className="flex min-h-11 flex-col items-center justify-center gap-1 rounded-lg text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground/95 [text-shadow:0_1px_1px_rgba(0,0,0,0.18)] transition-colors hover:bg-primary/20 hover:text-foreground">
+                  <Sparkles className="h-4 w-4 stroke-[2.3] drop-shadow-[0_1px_1px_rgba(0,0,0,0.24)]" />
                   Specials
                 </a>
               ) : null}
               {settings.show_contact ? (
-                <a href="#contact" className="flex min-h-11 flex-col items-center justify-center gap-1 rounded-lg text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-primary/16 hover:text-primary">
-                  <Phone className="h-3.5 w-3.5" />
+                <a href="#contact" className="flex min-h-11 flex-col items-center justify-center gap-1 rounded-lg text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground/95 [text-shadow:0_1px_1px_rgba(0,0,0,0.18)] transition-colors hover:bg-primary/20 hover:text-foreground">
+                  <Phone className="h-4 w-4 stroke-[2.3] drop-shadow-[0_1px_1px_rgba(0,0,0,0.24)]" />
                   Contact
                 </a>
               ) : null}
@@ -518,9 +521,9 @@ const Index = () => {
                 <button
                   type="button"
                   onClick={openOrderListFromMobileNav}
-                  className="flex min-h-11 flex-col items-center justify-center gap-1 rounded-lg text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-primary/16 hover:text-primary"
+                  className="flex min-h-11 flex-col items-center justify-center gap-1 rounded-lg text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground/95 [text-shadow:0_1px_1px_rgba(0,0,0,0.18)] transition-colors hover:bg-primary/20 hover:text-foreground"
                 >
-                  <PackageCheck className="h-3.5 w-3.5" />
+                  <PackageCheck className="h-4 w-4 stroke-[2.3] drop-shadow-[0_1px_1px_rgba(0,0,0,0.24)]" />
                   Order
                 </button>
               ) : null}
@@ -531,7 +534,7 @@ const Index = () => {
         <button
           type="button"
           onClick={() => setMobileNavMinimized(false)}
-          className="fixed bottom-3 right-3 z-50 inline-flex h-11 w-11 items-center justify-center rounded-full border border-primary/40 bg-background/74 text-primary shadow-[0_14px_30px_-18px_rgba(0,0,0,0.9)] backdrop-blur-xl sm:hidden"
+          className="fixed bottom-3 right-3 z-50 inline-flex h-11 w-11 items-center justify-center rounded-full border border-primary/45 bg-background/82 text-foreground shadow-[0_14px_30px_-18px_rgba(0,0,0,0.9)] backdrop-blur-xl sm:hidden"
           aria-label="Open quick navigation"
           aria-expanded={false}
         >
