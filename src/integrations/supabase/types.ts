@@ -326,6 +326,7 @@ export type Database = {
           secondary_color: string
           show_about: boolean
           show_contact: boolean
+          show_order_list: boolean
           show_operating_hours: boolean
           show_weekly_specials: boolean
           updated_at: string
@@ -347,6 +348,7 @@ export type Database = {
           secondary_color?: string
           show_about?: boolean
           show_contact?: boolean
+          show_order_list?: boolean
           show_operating_hours?: boolean
           show_weekly_specials?: boolean
           updated_at?: string
@@ -368,6 +370,7 @@ export type Database = {
           secondary_color?: string
           show_about?: boolean
           show_contact?: boolean
+          show_order_list?: boolean
           show_operating_hours?: boolean
           show_weekly_specials?: boolean
           updated_at?: string

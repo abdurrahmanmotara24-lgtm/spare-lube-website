@@ -17,6 +17,7 @@ export interface SiteSettings {
   hero_subheading: string;
   show_about: boolean;
   show_contact: boolean;
+  show_order_list: boolean;
   show_operating_hours: boolean;
   show_weekly_specials: boolean;
 }
@@ -37,6 +38,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   hero_subheading: "Shell, Castrol, and More",
   show_about: true,
   show_contact: true,
+  show_order_list: true,
   show_operating_hours: true,
   show_weekly_specials: true,
 };

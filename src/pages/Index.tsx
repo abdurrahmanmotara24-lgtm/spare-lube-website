@@ -410,6 +410,7 @@ const Index = () => {
         onRemoveQuoteItem={handleRemoveQuoteItem}
         onUpdateQuoteItemQuantity={handleUpdateQuoteItemQuantity}
         onClearQuoteList={handleClearQuoteList}
+        showQuoteList={settings.show_order_list}
         quoteCountPulseKey={quoteCountPulseKey}
         onQuoteTargetReady={(target, element) => {
           if (target === "desktop") {
@@ -478,9 +479,17 @@ const Index = () => {
 
             <div
               className={`grid gap-1 pr-6 ${
-                settings.show_weekly_specials && settings.show_contact
+                2 +
+                  (settings.show_weekly_specials ? 1 : 0) +
+                  (settings.show_contact ? 1 : 0) +
+                  (settings.show_order_list ? 1 : 0) >=
+                5
                   ? "grid-cols-5"
-                  : settings.show_weekly_specials || settings.show_contact
+                  : 2 +
+                        (settings.show_weekly_specials ? 1 : 0) +
+                        (settings.show_contact ? 1 : 0) +
+                        (settings.show_order_list ? 1 : 0) ===
+                      4
                     ? "grid-cols-4"
                     : "grid-cols-3"
               }`}
@@ -505,14 +514,16 @@ const Index = () => {
                   Contact
                 </a>
               ) : null}
-              <button
-                type="button"
-                onClick={openOrderListFromMobileNav}
-                className="flex min-h-11 flex-col items-center justify-center gap-1 rounded-lg text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-primary/16 hover:text-primary"
-              >
-                <PackageCheck className="h-3.5 w-3.5" />
-                Order
-              </button>
+              {settings.show_order_list ? (
+                <button
+                  type="button"
+                  onClick={openOrderListFromMobileNav}
+                  className="flex min-h-11 flex-col items-center justify-center gap-1 rounded-lg text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-primary/16 hover:text-primary"
+                >
+                  <PackageCheck className="h-3.5 w-3.5" />
+                  Order
+                </button>
+              ) : null}
             </div>
           </div>
         </nav>

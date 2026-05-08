@@ -9,12 +9,14 @@ import { Switch } from "@/components/ui/switch";
 type VisibilityKey =
   | "show_about"
   | "show_contact"
+  | "show_order_list"
   | "show_operating_hours"
   | "show_weekly_specials";
 
 const VISIBILITY_FIELDS: Array<{ key: VisibilityKey; label: string; description: string }> = [
   { key: "show_about", label: "About page", description: "Shows About route and navigation links." },
   { key: "show_contact", label: "Contact page and section", description: "Shows Contact route, links, and home contact section." },
+  { key: "show_order_list", label: "Order List", description: "Shows order list buttons and mobile quick-nav Order action." },
   { key: "show_operating_hours", label: "Operating Hours page", description: "Shows Operating Hours route and navigation links." },
   { key: "show_weekly_specials", label: "Weekly Specials section", description: "Shows weekly specials block and mobile quick-nav item." },
 ];
@@ -26,6 +28,7 @@ const SiteVisibilitySettings = () => {
   const [draft, setDraft] = useState<Record<VisibilityKey, boolean>>({
     show_about: settings.show_about,
     show_contact: settings.show_contact,
+    show_order_list: settings.show_order_list,
     show_operating_hours: settings.show_operating_hours,
     show_weekly_specials: settings.show_weekly_specials,
   });
@@ -34,12 +37,14 @@ const SiteVisibilitySettings = () => {
     setDraft({
       show_about: settings.show_about,
       show_contact: settings.show_contact,
+      show_order_list: settings.show_order_list,
       show_operating_hours: settings.show_operating_hours,
       show_weekly_specials: settings.show_weekly_specials,
     });
   }, [
     settings.show_about,
     settings.show_contact,
+    settings.show_order_list,
     settings.show_operating_hours,
     settings.show_weekly_specials,
   ]);
